@@ -40,6 +40,8 @@ Replace myemail1@gmail.com, myemail2@gmail.com, and myemail3@gmail.com with the 
 
 ## Run
 
+Once required files created you can run the program:
+
 ```python
 python main.py
 ```
