@@ -1,9 +1,9 @@
-import participants as p
+from participants import Participant
 
 
 def main():
-    all_participants = p.Participant.load_participants()
-    p.Participant.select_gift_to(all_participants)
+    all_participants = Participant.load_participants()
+    Participant.select_gift_to(all_participants)
     for participant in all_participants:
         participant.send_email()
 
