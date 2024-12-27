@@ -2,7 +2,7 @@ import json
 import random
 import sys
 from dataclasses import dataclass
-from typing import List
+from typing import List, Dict
 import smtplib
 from email.message import EmailMessage
 from datetime import datetime
@@ -13,8 +13,12 @@ import os
 class Participant:
     name: str
     email: str
+    wishes: List[Dict[str, str]]
     gifts_to: str = ''
-    wishes: str = ''
+
+    def __post_init__(self):
+        if self.wishes is None:
+            self.wishes = []
 
     @staticmethod
     def load_participants():
@@ -55,11 +59,25 @@ class Participant:
                     "One or more participants gift to themselves."
                     + " Make sure there are no dublicate names")
 
+    def parse_wishes(self):
+        """
+        Expects wishes to contain dictionaries where
+        under 1st key is a gift, 2nd url.
+        """
+        wishes = "\nPageidaujamų dovanų sąrašas:\n"
+        for index, wish in enumerate(self.wishes):
+            keys = list(wish.keys())
+            gift = wish[keys[0]]
+            url = wish[keys[1]]
+            message = f"\n{index + 1}. {gift}\n{url}.\n"
+            wishes += message
+        return wishes
+
     def parse_message(self):
-        start = f"\nSveiki!\n\nŠiais metais dovaną dovanosite: {self.gifts_to}\n"
+        start = f"\nSveiki!\n\nŠiais metais Jūsų dovanos lauks - {self.gifts_to}\n"
         middle = ''
         if self.wishes:
-            middle = f"\nPageidaujamų dovanų sąrašas:\n{self.wishes}\n"
+            middle = self.parse_wishes()
         end = "\nGražių švenčių!"
         message = start + middle + end
         return message
@@ -125,7 +143,7 @@ class Participant:
         file_path = os.path.join(logs_dir, f"{current_time}.txt")
         for index, participant in enumerate(participants):
             message = (
-                f"{index + 1}. {participant.name} dovaną dovanoją: "
+                f"{index + 1}. {participant.name} dovaną dovanoja: "
                 + f"{participant.gifts_to}.\n")
             log_message += message
         with open(file_path, "w") as file:
