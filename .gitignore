@@ -1,12 +1,17 @@
-#Private files
+# Private files
 
 participants.json
 sender.json
+logs/*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
 *$py.class
+
+# IDE files
+.vscode
+.flake8
 
 # C extensions
 *.so

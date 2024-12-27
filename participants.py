@@ -5,6 +5,8 @@ from dataclasses import dataclass
 from typing import List
 import smtplib
 from email.message import EmailMessage
+from datetime import datetime
+import os
 
 
 @dataclass
@@ -12,6 +14,7 @@ class Participant:
     name: str
     email: str
     gifts_to: str = ''
+    wishes: str = ''
 
     @staticmethod
     def load_participants():
@@ -52,13 +55,20 @@ class Participant:
                     "One or more participants gift to themselves."
                     + " Make sure there are no dublicate names")
 
+    def parse_message(self):
+        start = f"\nSveiki!\n\nŠiais metais dovaną dovanosite: {self.gifts_to}\n"
+        middle = ''
+        if self.wishes:
+            middle = f"\nPageidaujamų dovanų sąrašas:\n{self.wishes}\n"
+        end = "\nGražių švenčių!"
+        message = start + middle + end
+        return message
+
     def send_email(self):
         "Sends email from email specified in sender.json to the participant"
 
         receiver = self.email
-        message = (
-            f"\nSveiki!\n\nŠiais metais dovaną dovanosite: {self.gifts_to}\n" +
-            "\nGražių švenčių!")
+        message = self.parse_message()
 
         try:
             with open("sender.json", "r") as file:
@@ -80,7 +90,7 @@ class Participant:
         em = EmailMessage()
         em["From"] = sender
         em["To"] = receiver
-        em["Subject"] = "Kalėdų senelis"
+        em["Subject"] = "TESTAS - Kalėdų senelis"
         em.set_content(message)
         smtp_server = "smtp.gmail.com"
         smtp_port = 587
@@ -103,3 +113,21 @@ class Participant:
             sys.exit(f"SMTP error occurred sending to {self.name}: {e}")
         except Exception as e:
             sys.exit(f"Error occurred sending email to {self.name}: {e}")
+
+    @staticmethod
+    def send_emails(participants: List["Participant"]):
+        for participant in participants:
+            participant.send_email()
+        log_message = ''
+        logs_dir = "logs"
+        os.makedirs(logs_dir, exist_ok=True)
+        current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        file_path = os.path.join(logs_dir, f"{current_time}.txt")
+        for index, participant in enumerate(participants):
+            message = (
+                f"{index + 1}. {participant.name} dovaną dovanoją: "
+                + f"{participant.gifts_to}.\n")
+            log_message += message
+        with open(file_path, "w") as file:
+            file.write(log_message + "\n")
+            print(f"{current_time}.txt saved")
