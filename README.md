@@ -38,6 +38,24 @@ Here is an example of the participants.json format:
 Replace name1, name2, name3 with the names of the participants.
 Replace myemail1@gmail.com, myemail2@gmail.com, and myemail3@gmail.com with the participants' actual email addresses.
 
+You can also add gift wishlist under key 'wishes' for each of participants in a format:
+
+```json
+[
+  { "name": "name1",
+    "email": "myemail1@gmail.com",
+    "wishes": [
+      {
+      "gift": "gift-example1",
+      "url": "www.example-link1.com"
+      },
+        {
+      "gift": "gift-example2",
+      "url": "www.example-link2.com"
+      },
+]}
+]
+```  
 ## Run
 
 Once required files created you can run the program:
