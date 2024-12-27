@@ -21,6 +21,14 @@ Replace "your_sender_email@gmail.com" with the email address you want to send th
 
 Replace "your_gmail_app_key" with your Gmail App password. You can generate this password via your Google account settings.
 
+1. select manage "Google" account.
+
+2. Under security Turn on 2-step Verification
+
+3. In the search field of google account type and select "App passwords"
+
+4. Select app name and create password. This generated passowrd will be password used inside sender.json
+
 ### 2. **Create `participants.json`**
 
 This file contains an array of participants, each with a name and an email address. There must be a minimum of 3 participants.
@@ -45,15 +53,15 @@ You can also add gift wishlist under key 'wishes' for each of participants in a 
   { "name": "name1",
     "email": "myemail1@gmail.com",
     "wishes": [
-      {
-      "gift": "gift-example1",
-      "url": "www.example-link1.com"
-      },
-        {
-      "gift": "gift-example2",
-      "url": "www.example-link2.com"
-      },
-]}
+          {
+          "gift": "gift-example1",
+          "url": "www.example-link1.com"
+          },
+          {
+          "gift": "gift-example2",
+          "url": "www.example-link2.com"
+          },
+  ]}
 ]
 ```  
 ## Run
